@@ -22,7 +22,7 @@ class MarkCalendar(QCalendarWidget):
             painter.setPen(QColor("#ff4757"))
             font = painter.font()
             font.setPointSize(9)
-            font.setBold(True)
+            font.setBold(False)
             painter.setFont(font)
             target_rect = rect.adjusted(0, 1, -4, 0)
             painter.drawText(target_rect, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop, "T")
@@ -44,7 +44,7 @@ class ArrowDelegate(QStyledItemDelegate):
         if is_selected:
             painter.setPen(QColor("#3498db"))
             arrow_font = QFont()
-            arrow_font.setBold(True)
+            arrow_font.setBold(False)
             painter.setFont(arrow_font)
             painter.drawText(option.rect.adjusted(5, 0, 0, 0), Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, "▶")
             text_margin = 25
@@ -53,7 +53,7 @@ class ArrowDelegate(QStyledItemDelegate):
         painter.setPen(QColor("#2c3e50"))
         font = option.font
         if is_selected:
-            font.setBold(True)
+            font.setBold(False)
         painter.setFont(font)
         
         text_rect = option.rect.adjusted(text_margin, 0, -5, 0)
@@ -133,7 +133,7 @@ class MyRSS(QMainWindow):
         left_layout.addWidget(self.status_label)
 
         self.btn_fetch = QPushButton("新着記事を取得")
-        self.btn_fetch.setStyleSheet("background-color: #2ecc71; color: white; border-radius: 5px; font-weight: bold; padding: 10px;")
+        self.btn_fetch.setStyleSheet("background-color: #2ecc71; color: white; border-radius: 5px; padding: 10px;")
         self.btn_fetch.clicked.connect(self.start_fetch)
         left_layout.addWidget(self.btn_fetch)
         left_layout.addStretch()
