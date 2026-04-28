@@ -192,6 +192,7 @@ class MyRSS(QMainWindow):
             self.browser.setHtml("<div style='color:gray; padding:20px;'>記事はありません。</div>")
             return
         files = sorted(os.listdir(date_path), reverse=True)
+        items = []
         for fname in files:
             if not fname.endswith('.json'):
                 continue
@@ -200,9 +201,12 @@ class MyRSS(QMainWindow):
                     data = json.load(f)
                     item = QListWidgetItem(data['title'])
                     item.setData(Qt.ItemDataRole.UserRole, data)
-                    self.article_list.addItem(item)
+                    items.append((item, data["date"]))
             except:
                 pass
+        items = sorted(items, key=lambda x: x[1], reverse=True)
+        for item in items:
+            self.article_list.addItem(item[0])
         if self.article_list.count() > 0:
             self.article_list.setCurrentRow(0)
 
