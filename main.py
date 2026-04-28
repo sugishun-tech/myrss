@@ -1,22 +1,25 @@
-import sys
-import os
-import feedparser
 import json
+import os
+import sys
 from datetime import datetime
-from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                             QHBoxLayout, QListWidget, QListWidgetItem, 
-                             QPushButton, QCalendarWidget, QTextBrowser, QLabel, 
-                             QStyledItemDelegate, QStyle)
-from PyQt6.QtGui import QPainter, QColor, QFont
+
+import feedparser
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
+from PyQt6.QtGui import QColor, QFont, QPainter
+from PyQt6.QtWidgets import (QApplication, QCalendarWidget, QHBoxLayout,
+                             QLabel, QListWidget, QListWidgetItem, QMainWindow,
+                             QPushButton, QStyle, QStyledItemDelegate,
+                             QTextBrowser, QVBoxLayout, QWidget)
 
 # --- 1. カレンダーのカスタマイズ (記事がある日にTを表示) ---
+
+
 class MarkCalendar(QCalendarWidget):
     def paintCell(self, painter, rect, date):
         super().paintCell(painter, rect, date)
         year, month, day = str(date.year()), str(date.month()).zfill(2), str(date.day()).zfill(2)
         date_path = f"data/{year}/{month}/{day}"
-        
+
         if os.path.exists(date_path) and any(f.endswith('.json') for f in os.listdir(date_path)):
             painter.save()
             painter.setPen(QColor("#ff4757"))
@@ -29,17 +32,19 @@ class MarkCalendar(QCalendarWidget):
             painter.restore()
 
 # --- 2. リストの見た目カスタマイズ (青いバーを消して矢印を出す) ---
+
+
 class ArrowDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         painter.save()
-        
+
         is_selected = option.state & QStyle.StateFlag.State_Selected
 
         # 背景描画
         painter.fillRect(option.rect, QColor("white"))
 
         text_margin = 10
-        
+
         # 選択状態なら矢印を描画
         if is_selected:
             painter.setPen(QColor("#3498db"))
@@ -55,10 +60,10 @@ class ArrowDelegate(QStyledItemDelegate):
         if is_selected:
             font.setBold(False)
         painter.setFont(font)
-        
+
         text_rect = option.rect.adjusted(text_margin, 0, -5, 0)
         painter.drawText(text_rect, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, index.data(Qt.ItemDataRole.DisplayRole))
-        
+
         painter.restore()
 
     def sizeHint(self, option, index):
@@ -67,6 +72,8 @@ class ArrowDelegate(QStyledItemDelegate):
         return size
 
 # --- 3. RSS取得スレッド (favicon取得を廃止) ---
+
+
 class FetchWorker(QThread):
     finished = pyqtSignal()
     progress = pyqtSignal(str)
@@ -92,16 +99,19 @@ class FetchWorker(QThread):
                     if not os.path.exists(file_path):
                         with open(file_path, 'w', encoding='utf-8') as f:
                             json.dump({
-                                'title': entry.title, 
-                                'link': entry.link, 
-                                'summary': entry.get('summary', ''), 
-                                'domain': domain, 
+                                'title': entry.title,
+                                'link': entry.link,
+                                'summary': entry.get('summary', ''),
+                                'domain': domain,
                                 'date': dt.strftime('%Y-%m-%d %H:%M')
                             }, f, ensure_ascii=False)
-            except: continue
+            except:
+                continue
         self.finished.emit()
 
 # --- 4. メインウィンドウ ---
+
+
 class MyRSS(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -148,7 +158,7 @@ class MyRSS(QMainWindow):
             QListWidget::item { color: #2c3e50; }
         """)
         self.article_list.itemSelectionChanged.connect(self.on_selection_changed)
-        
+
         self.browser = QTextBrowser()
         self.browser.setOpenExternalLinks(True)
         right_layout.addWidget(QLabel("<b>記事一覧</b>"))
@@ -183,14 +193,16 @@ class MyRSS(QMainWindow):
             return
         files = sorted(os.listdir(date_path), reverse=True)
         for fname in files:
-            if not fname.endswith('.json'): continue
+            if not fname.endswith('.json'):
+                continue
             try:
                 with open(os.path.join(date_path, fname), 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     item = QListWidgetItem(data['title'])
                     item.setData(Qt.ItemDataRole.UserRole, data)
                     self.article_list.addItem(item)
-            except: pass
+            except:
+                pass
         if self.article_list.count() > 0:
             self.article_list.setCurrentRow(0)
 
@@ -198,7 +210,7 @@ class MyRSS(QMainWindow):
         data = item.data(Qt.ItemDataRole.UserRole)
         html = f"""
         <body style='font-family:sans-serif; padding:15px;'>
-            <div style='color:#7f8c8d;font-size:12px;'>{data.get('date','')} | {data['domain']}</div>
+            <div style='color:#7f8c8d;font-size:12px;'>{data.get('date', '')} | {data['domain']}</div>
             <h1 style='margin-top:5px; font-size:20px;'>{data['title']}</h1>
             <p><a href='{data['link']}' style='color:#3498db;'>➔ ブラウザで開く</a></p>
             <hr style='border:0; border-top:1px solid #eee;'>
@@ -206,6 +218,7 @@ class MyRSS(QMainWindow):
         </body>
         """
         self.browser.setHtml(html)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
