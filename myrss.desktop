@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=MyRSS
+Comment=Simple and Lightweight RSS Reader
+Path=/home/shun/develop/myrss
+Exec=/home/shun/develop/myrss/venv/bin/python /home/shun/develop/myrss/main.py
+Icon=/home/shun/develop/myrss/icon.png
+Terminal=false
+Categories=Network;News;

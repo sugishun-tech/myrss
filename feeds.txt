@@ -1,0 +1,17 @@
+https://assets.wor.jp/rss/rdf/bloomberg/companies.rdf
+https://assets.wor.jp/rss/rdf/bloomberg/economics.rdf
+https://assets.wor.jp/rss/rdf/bloomberg/finance.rdf
+https://assets.wor.jp/rss/rdf/bloomberg/international.rdf
+https://assets.wor.jp/rss/rdf/bloomberg/markets.rdf
+https://assets.wor.jp/rss/rdf/bloomberg/opinion.rdf
+https://assets.wor.jp/rss/rdf/bloomberg/technology.rdf
+https://assets.wor.jp/rss/rdf/minkabufx/commodity.rdf
+https://assets.wor.jp/rss/rdf/minkabufx/statement.rdf
+https://assets.wor.jp/rss/rdf/minkabufx/stock.rdf
+https://assets.wor.jp/rss/rdf/reuters/business.rdf
+https://assets.wor.jp/rss/rdf/reuters/economy.rdf
+https://assets.wor.jp/rss/rdf/reuters/life.rdf
+https://assets.wor.jp/rss/rdf/reuters/markets.rdf
+https://assets.wor.jp/rss/rdf/reuters/opinion.rdf
+https://assets.wor.jp/rss/rdf/reuters/top.rdf
+https://assets.wor.jp/rss/rdf/reuters/world.rdf
